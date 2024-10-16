@@ -12,7 +12,7 @@ namespace WebAplication.Data
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 			=> optionsBuilder.UseSqlServer("Data Source =. \\SQLEXPRESS; " +
-				"Initial Catalog = Store; Trusted_Connection = True; " +
+				"Initial Catalog = Products; Trusted_Connection = True; " +
 				"TrustServerCertificate=True").UseLazyLoadingProxies().LogTo(Console.WriteLine);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
