@@ -12,7 +12,7 @@ namespace WebAplication.Controllers
 		public ProductController()
 		{
 		}
-
+		[HttpPost]
 		public ActionResult<int> AddProduct(string name, string discription, double price)
 		{
 			using (ProductContext storageContext = new ProductContext())
@@ -28,6 +28,18 @@ namespace WebAplication.Controllers
                 return Ok(product.Id);
             }
 		}
-	}
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Product>> GetProduct()
+        {
+            using (ProductContext storageContext = new ProductContext())
+            {
+				var list = storageContext.Products.
+					Select(p => new Product { Name = p.Name, Discription = p.Discription, Price = p.Price });
+				return Ok(list);
+            }
+        }
+
+    }
 }
 
