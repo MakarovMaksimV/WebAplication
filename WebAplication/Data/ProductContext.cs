@@ -11,10 +11,10 @@ namespace WebAplication.Data
         public virtual DbSet<Storage> Storage{ get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-			=> optionsBuilder.UseSqlServer("Data Source =. \\SQLEXPRESS; " +
-				"Initial Catalog = Products; Trusted_Connection = True; " +
-				"TrustServerCertificate=True").UseLazyLoadingProxies().LogTo(Console.WriteLine);
-
+        {
+            optionsBuilder.LogTo(Console.WriteLine).UseLazyLoadingProxies().UseNpgsql("Host=localhost; Username = Maxim; Password = 1111; Database = db");
+        }
+			
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 			modelBuilder.Entity<ProductGroup>(entity =>
