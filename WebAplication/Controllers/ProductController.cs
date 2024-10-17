@@ -13,7 +13,7 @@ namespace WebAplication.Controllers
 		public ProductController()
 		{
 		}
-		[HttpPost]
+		[HttpPost ("AddProduct")]
 		public ActionResult<int> AddProduct(string name, string discription, double price)
 		{
 			using (ProductContext storageContext = new ProductContext())
@@ -30,7 +30,7 @@ namespace WebAplication.Controllers
             }
 		}
 
-        [HttpGet("getProduct")]
+        [HttpGet("GetProduct")]
         public ActionResult<IEnumerable<Product>> GetProduct()
         {
             IEnumerable<Product> list;
@@ -41,6 +41,32 @@ namespace WebAplication.Controllers
                 return Ok(list);
             }
             
+        }
+
+        [HttpPost("DeleteProduct")]
+        public ActionResult<int> DeleteProduct(int id)
+        {
+            using (ProductContext storageContext = new ProductContext())
+            {
+                if (storageContext.Products.Any(x => x.Id == id))
+                {
+                    var deleteproduct = storageContext.Products.Find(id);
+                    if (deleteproduct != null)
+                    {
+                        storageContext.Products.Remove(deleteproduct);
+                        storageContext.SaveChanges();
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(409);
+                    }
+                }
+                else
+                {
+                    return StatusCode(409);
+                }
+            }
         }
     }
 }
