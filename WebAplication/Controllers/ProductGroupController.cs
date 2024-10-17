@@ -5,7 +5,9 @@ using WebAplication.Models;
 
 namespace WebAplication.Controllers
 {
-	public class ProductGroupController : ControllerBase
+    [ApiController]
+    [Route("[controller]")]
+    public class ProductGroupController : ControllerBase
 	{
 		public ProductGroupController()
 		{
