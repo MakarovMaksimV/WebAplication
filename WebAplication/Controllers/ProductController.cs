@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebAplication.Data;
 using WebAplication.Models;
@@ -29,17 +30,18 @@ namespace WebAplication.Controllers
             }
 		}
 
-        [HttpGet]
+        [HttpGet("getProduct")]
         public ActionResult<IEnumerable<Product>> GetProduct()
         {
+            IEnumerable<Product> list;
             using (ProductContext storageContext = new ProductContext())
             {
-				var list = storageContext.Products.
-					Select(p => new Product { Name = p.Name, Discription = p.Discription, Price = p.Price });
-				return Ok(list);
+				list = storageContext.Products.
+					Select(p => new Product { Name = p.Name, Discription = p.Discription, Price = p.Price }).ToList();
+                return Ok(list);
             }
+            
         }
-
     }
 }
 
