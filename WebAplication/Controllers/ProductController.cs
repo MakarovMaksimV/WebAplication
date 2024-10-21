@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using WebAplication.Abstraction;
 using WebAplication.Data;
+using WebAplication.Dto;
 using WebAplication.Models;
 
 namespace WebAplication.Controllers
@@ -10,36 +12,54 @@ namespace WebAplication.Controllers
 	[Route("[controller]")]
 	public class ProductController : ControllerBase
 	{
-		public ProductController()
-		{
-		}
-		[HttpPost ("AddProduct")]
-		public ActionResult<int> AddProduct(string name, string discription, double price)
-		{
-			using (ProductContext storageContext = new ProductContext())
-			{
-				if(storageContext.Products.Any(x=>x.Name.Contains(name)))
-				{
-					return StatusCode(409);
-				}
+        private readonly IProductRepo _productRepo;
 
-				Product product = new Product() { Name = name, Discription = discription, Price = price };
-				storageContext.Products.Add(product);
-				storageContext.SaveChanges();
-                return Ok(product.Id);
-            }
+        public ProductController(IProductRepo productRepo)
+		{
+            _productRepo = productRepo;
 		}
+
+
+		[HttpPost ("AddProduct")]
+		public ActionResult<int> AddProduct(ProductDto productDto)
+		{
+            try
+            {
+                var id = _productRepo.AddProduct(productDto);
+                return Ok(id);
+
+            }
+            catch(Exception)
+            {
+                return StatusCode(409);
+            }
+            
+            //using (ProductContext storageContext = new ProductContext())
+            //{
+            //	if(storageContext.Products.Any(x=>x.Name.Contains(name)))
+            //	{
+            //		return StatusCode(409);
+            //	}
+
+            //	Product product = new Product() { Name = name, Discription = discription, Price = price };
+            //	storageContext.Products.Add(product);
+            //	storageContext.SaveChanges();
+            //             return Ok(product.Id);
+            //         }
+        }
 
         [HttpGet("GetProduct")]
         public ActionResult<IEnumerable<Product>> GetProduct()
         {
-            IEnumerable<Product> list;
-            using (ProductContext storageContext = new ProductContext())
-            {
-				list = storageContext.Products.
-					Select(p => new Product { Name = p.Name, Discription = p.Discription, Price = p.Price }).ToList();
-                return Ok(list);
-            }
+
+            return Ok(_productRepo.GetProduct());
+    //        IEnumerable<Product> list;
+    //        using (ProductContext storageContext = new ProductContext())
+    //        {
+				//list = storageContext.Products.
+				//	Select(p => new Product { Name = p.Name, Discription = p.Discription, Price = p.Price }).ToList();
+    //            return Ok(list);
+    //        }
             
         }
 

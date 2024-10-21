@@ -9,10 +9,21 @@ namespace WebAplication.Data
 		public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductGroup> ProductsGroup { get; set; }
         public virtual DbSet<Storage> Storage{ get; set; }
+        public readonly string _dbConnection;
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ProductContext()
         {
-            optionsBuilder.LogTo(Console.WriteLine).UseLazyLoadingProxies().UseNpgsql("Host=localhost; Username = Maxim; Password = 1111; Database = db");
+
+        }
+
+        public ProductContext(string connection)
+        {
+            _dbConnection = connection;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine).UseLazyLoadingProxies().UseNpgsql(_dbConnection);
         }
 			
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -49,10 +60,6 @@ namespace WebAplication.Data
             });
 
         }
-
-        public ProductContext()
-		{
-		}
 	}
 }
 
