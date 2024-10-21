@@ -9,7 +9,7 @@ namespace WebAplication.Abstraction
 	public interface IProductGroupRepo
 	{
         public ActionResult<int> AddProductGroup(ProductGroupDto productGroupDto);
-        public ActionResult<int> DeleteProductGroup(int id);
+        public ActionResult<int> DeleteProductGroup(ProductGroupDto productGroupDto);
 
     }
 }
