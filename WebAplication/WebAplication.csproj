@@ -30,6 +30,7 @@
     <None Remove="Dto\" />
     <None Remove="Mapper\" />
     <None Remove="Abstraction\" />
+    <None Remove="OutModels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -38,5 +39,6 @@
     <Folder Include="Dto\" />
     <Folder Include="Mapper\" />
     <Folder Include="Abstraction\" />
+    <Folder Include="OutModels\" />
   </ItemGroup>
 </Project>
