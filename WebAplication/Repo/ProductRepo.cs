@@ -46,9 +46,18 @@ namespace WebAplication.Repo
             return listDto;
         }
 
-        public ActionResult<int> DeleteProduct(int id)
+        public ActionResult<int> DeleteProduct(ProductDto productDto)
         {
-            throw new NotImplementedException();
+            if (storageContext.Products.Any(x => x.Id == productDto.Id))
+            {
+                var entity = _mapper.Map<Product>(productDto);
+                storageContext.Products.Remove(entity);
+                storageContext.SaveChanges();
+                _memoryCache.Remove("products");
+                return entity.Id;
+            }
+            else
+                throw new Exception("Продукта нет в базе");
         }
     }
 }

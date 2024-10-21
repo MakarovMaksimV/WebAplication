@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebAplication.Abstraction;
 using WebAplication.Data;
 using WebAplication.Dto;
 using WebAplication.Models;
+using WebAplication.OutModels;
 
 namespace WebAplication.Controllers
 {
@@ -33,34 +36,12 @@ namespace WebAplication.Controllers
             {
                 return StatusCode(409);
             }
-            
-            //using (ProductContext storageContext = new ProductContext())
-            //{
-            //	if(storageContext.Products.Any(x=>x.Name.Contains(name)))
-            //	{
-            //		return StatusCode(409);
-            //	}
-
-            //	Product product = new Product() { Name = name, Discription = discription, Price = price };
-            //	storageContext.Products.Add(product);
-            //	storageContext.SaveChanges();
-            //             return Ok(product.Id);
-            //         }
         }
 
         [HttpGet("GetProduct")]
         public ActionResult<IEnumerable<Product>> GetProduct()
         {
-
             return Ok(_productRepo.GetProduct());
-    //        IEnumerable<Product> list;
-    //        using (ProductContext storageContext = new ProductContext())
-    //        {
-				//list = storageContext.Products.
-				//	Select(p => new Product { Name = p.Name, Discription = p.Discription, Price = p.Price }).ToList();
-    //            return Ok(list);
-    //        }
-            
         }
 
         [HttpPost("DeleteProduct")]
@@ -87,6 +68,32 @@ namespace WebAplication.Controllers
                     return StatusCode(409);
                 }
             }
+        }
+
+        public FileContentResult GetProductsCSV()
+        {
+            using (ProductContext storageContext = new ProductContext())
+            {
+                var books = storageContext.Products.Select(x => new ProductOutModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Discription = x.Discription,
+                    Price = x.Price,
+                }).ToList();
+                var content = GetCsv(books);
+                return File(Encoding.UTF8.GetBytes(content), "text/csv", "products.csv");
+            }
+        }
+
+        private string GetCsv(IEnumerable<ProductOutModel> products)
+        {
+            var sb = new StringBuilder();
+            foreach (var product in products)
+            {
+                sb.AppendLine($"{product.Id};{product.Name};{product.Discription};{product.Price}");
+            }
+            return sb.ToString();
         }
     }
 }

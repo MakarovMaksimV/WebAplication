@@ -8,10 +8,7 @@ namespace WebAplication.Abstraction
 {
 	public interface IProductGroupRepo
 	{
-        [HttpPost("AddGroup")]
         public ActionResult<int> AddProductGroup(ProductGroupDto productGroupDto);
-
-        [HttpPost("DeleteGroup")]
         public ActionResult<int> DeleteProductGroup(int id);
 
     }

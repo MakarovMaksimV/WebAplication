@@ -9,7 +9,6 @@ namespace WebAplication.Dto
         public string Name { get; set; }
         public string Discription { get; set; }
         public virtual List<Product> Products { get; set; }
-
     }
 }
 

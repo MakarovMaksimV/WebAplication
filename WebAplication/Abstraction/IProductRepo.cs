@@ -8,13 +8,8 @@ namespace WebAplication.Abstraction
 {
 	public interface IProductRepo
 	{
-        [HttpPost("AddProduct")]
         public int AddProduct(ProductDto productDto);
-
-        [HttpGet("GetProduct")]
         public ActionResult<IEnumerable<ProductDto>> GetProduct();
-
-        [HttpPost("DeleteProduct")]
         public ActionResult<int> DeleteProduct(int id);
     }
 }

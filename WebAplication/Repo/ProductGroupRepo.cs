@@ -31,9 +31,18 @@ namespace WebAplication.Repo
             return entity.Id;
         }
 
-        public ActionResult<int> DeleteProductGroup(int id)
+        public ActionResult<int> DeleteProductGroup(ProductGroupDto productGroupDto)
         {
-            throw new NotImplementedException();
+            if (storageContext.ProductsGroup.Any(x => x.Id == productGroupDto.Id))
+            {
+                var entity = _mapper.Map<ProductGroup>(productGroupDto);
+                storageContext.ProductsGroup.Remove(entity);
+                storageContext.SaveChanges();
+                return entity.Id;
+            }
+            else
+                throw new Exception("Группа не найдена");
+            
         }
     }
 }
